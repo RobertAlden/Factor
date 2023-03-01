@@ -1,8 +1,12 @@
-USING: io kernel math math.functions sequences quotations continuations prettyprint ;
+USING:  io kernel math math.functions sequences 
+        quotations continuations prettyprint ;
 IN: pe2
 
-: fib ( x y -- y z ) swap over +
-: iter ( a b c -- ) dup pick < [ fib iter ] [  ] if ;
-: answer ( -- ) 4000000 0 1 + . ;
+: fib ( x -- x ) dup reverse first2 + suffix ;
+: iter ( a b -- a c ) dup last pick < [ fib iter ] when ;
+
+: answer ( -- ) 4000000 { 0 1 } iter 
+                [ even? ] filter 
+                0 [ + ] reduce . drop ;
 
 MAIN: answer
