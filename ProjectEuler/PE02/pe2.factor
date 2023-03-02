@@ -7,6 +7,6 @@ IN: pe2
 
 : answer ( -- ) 4000000 { 0 1 } iter 
                 [ even? ] filter 
-                0 [ + ] reduce . drop ;
+                sum . drop ;
 
 MAIN: answer
