@@ -4,7 +4,7 @@
         {
             "label": "Run Factor File",
             "type": "shell",
-            "command": "if [ $(uname) == 'Linux' ]; then factor ${file}; else factor.com -run ${file}; fi",
+            "command": "if [ $(uname) == 'Linux' ]; then ~/factor/factor ${file}; else factor.com -run ${file}; fi",
             "presentation": {
                 "reveal": "always"
             },
