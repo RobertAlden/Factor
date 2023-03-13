@@ -8,6 +8,6 @@ IN: pe3
 : answer ( -- ) 600851475143 2 { } 
                 [ pick 1 = ] [ iter ] until 
                 last . 
-                2drop  ; 
+                2drop ; 
 
 MAIN: answer

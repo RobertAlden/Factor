@@ -1,6 +1,6 @@
-USING: io sequences stack-checker ;
+USING: io sequences stack-checker dnasyntax prettyprint project-euler.pe1 ;
 IN: scratch
 
-: hello ( -- ) { 5 3 5 1 3 } [ ] each infer.
+: hello ( -- ) 10 rangeSum . ;
 
 MAIN: hello
