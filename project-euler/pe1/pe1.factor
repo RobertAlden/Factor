@@ -1,5 +1,5 @@
 USING: io kernel math math.functions sequences quotations continuations prettyprint ;
-IN: pe1
+IN: ProjectEuler.PE01
 
 : rangeSum ( n -- n ) 2 swap dup 1 + * swap / ;
 : rangeMultipleSum ( a b -- n ) over / floor rangeSum * ;
