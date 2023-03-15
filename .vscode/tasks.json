@@ -2,9 +2,22 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run Factor File",
+            "label": "Run Factor File (Windows)",
             "type": "shell",
-            "command": "if [ $(uname) == 'Linux' ]; then ~/factor/factor ${file}; else factor.com -run ${file}; fi",
+            "command": "factor.com -run ${file}",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run Factor File (Linux)",
+            "type": "shell",
+            "command": "~/factor/factor ${file}",
             "presentation": {
                 "reveal": "always"
             },
