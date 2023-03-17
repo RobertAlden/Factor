@@ -33,6 +33,22 @@ IN: combinatory-logic
 
 : extract ( (x) -- x ) [| s |  1 41 1 s index-from s subseq ] call ;
 
+! : group-parens ( seq -- seq ) dup [ "(" swap index ] [ ")" swap last-index ] bi 1 + pick subseq "" join ;
+
+: find-outer-parens ( str -- seq ) 
+    [ [ 40 = [ 1 ] [ 0 ] if ] { } map-as ] 
+    [ [ 41 = [ 1 ] [ 0 ] if ] { } map-as ] bi
+    [ - ] 2map 
+    0 [ + ] accumulate*
+    0 swap indices ;
+
+: atomize ( str -- seq ) dup length [1..b) split-indices ; 
+
+: tokenize ( str -- seq ) dup 
+    [ 40 swap index ] [ 41 swap last-index ] bi 
+    1 + 2array split-indices 
+    dup [ ] [ ] bi ;
+
 : compute ( x -- x ) 
     1 cut [ translate ] [ pad-vars ] bi* 
     over length cut ! -- TODO: fix for parens
