@@ -1,4 +1,4 @@
-USING: combinatory-logic tools.test ; 
+USING: combinatory-logic tools.test kernel ; 
 
 { "" } [ "" elevate ] unit-test 
 { "ABC(DEF)" } [ "ABC(DEF)" elevate ] unit-test
@@ -21,5 +21,7 @@ USING: combinatory-logic tools.test ;
 { "yz((xy)z)" } [ "SS" evaluate ] unit-test
 { "xy((Sx)y)" } [ "SSS" evaluate ] unit-test
 
-{ "(xz)y" } [ "C" ] unit-test
-{ "(xz)y" } [ "(S(S(K(S(KS)K))S)(KK))" evaluate ] unit-test
+{ "(xz)y" } [ "C" compute ] unit-test
+{ "xz((((KK)x)y)z)" } [ "(S(S(K(S(KS)K))S)(KK))" evaluate ] unit-test
+{ "xzy" } [ "(S(S(K(S(KS)K))S)(KK))" resolve ] unit-test
+{ t } [ "J" "((S(K(S(K((S((S(K((S(KS))K)))S))(KK))))))((S((S(K((S((SK)K))((SK)K))))((S(K((S(KS))K)))((S(K(S((SK)K))))K))))(K((S(K((S((S(K((S(KS))K)))S))(KK))))(S(K((S(K((S(KS))K)))((S(KS))K))))))))" [ resolve ] bi@ = ] unit-test
