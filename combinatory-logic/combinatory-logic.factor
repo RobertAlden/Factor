@@ -1,8 +1,8 @@
-USING: arrays assocs kernel lexer math math.order quotations
-ranges sequences sets splitting strings words unicode tools.test ;
+USING: arrays assocs continuations eval kernel lexer math math.order quotations
+ranges sequences sets sequences.deep splitting sorting strings words unicode tools.test ;
 IN: combinatory-logic
 
-: vars ( -- vars ) "xyzwvutsrqponmlkjihgfedcba" ;
+: vars ( -- vars ) "zyxwvutsrqponmlkjihgfedcba" ;
 
 : lookup-table ( C -- def ) 
     H{ 
@@ -14,6 +14,7 @@ IN: combinatory-logic
         { "B" "abc" }
         { "M" "a" }
         { "J" "abcd" }
+        { "P" "abcd" }
     } at ;
 
 : transform-table ( C -- res ) 
@@ -26,6 +27,7 @@ IN: combinatory-logic
         { "B" "a(bc)" }
         { "M" "aa" }
         { "J" "ab(adc)" }
+        { "P" "a(bd)(cd)" }
     } at ;
 
 : translate ( C -- def abc ) [ transform-table ] [ lookup-table ] bi ;
@@ -87,6 +89,18 @@ IN: combinatory-logic
         "" join 
     ] until ; inline recursive
 
-: compile ( str -- quot )  ;
+: compile ( str -- quot ) 
+    paren? [ extract ] when tokenize reverse 
+    [ paren? [ compile ]  when ] map flatten { "call" } append ; inline recursive
+
+: execute ( str -- lex ) 
+    resolve compile { "|" } over 
+    [ length 1 = ] filter
+    "" join vars intersect 
+    tokenize sort
+    { "[|" } prepend prepend prepend { "]" } append
+    " " join parse-string ;
+
+: run ( -- x ) get-datastack [ execute call call ] with-datastack first  ; 
 
 : run-tests ( -- ) "combinatory-logic" test ;
