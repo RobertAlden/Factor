@@ -8,20 +8,20 @@ USING: combinatory-logic tools.test kernel ;
 
 ! { "" } [ "" compute ] unit-test
 
-{ "Kx(Kx)" } [ "SKK" compute ] unit-test
-{ "x" } [ "I" compute ] unit-test
-{ "xx" } [ "(Kx)Kx" compute ] unit-test
+{ "Kz(Kz)" } [ "SKK" compute ] unit-test
+{ "z" } [ "I" compute ] unit-test
+{ "zz" } [ "(Kz)Kz" compute ] unit-test
 { "a" } [ "Kab" compute ] unit-test
-{ "x" } [ "Kx" compute ] unit-test
+{ "z" } [ "Kz" compute ] unit-test
 { "Ia" } [ "IIa" compute ] unit-test
 
-{ "xy((Sx)y)" } [ "Sx(Sx)" compute ] unit-test 
+{ "zy((Sz)y)" } [ "Sz(Sz)" compute ] unit-test 
 
-{ "xz(yz)" } [ "S" evaluate ] unit-test
-{ "yz((xy)z)" } [ "SS" evaluate ] unit-test
-{ "xy((Sx)y)" } [ "SSS" evaluate ] unit-test
+{ "zx(yx)" } [ "S" evaluate ] unit-test
+{ "yx((zy)x)" } [ "SS" evaluate ] unit-test
+{ "zy((Sz)y)" } [ "SSS" evaluate ] unit-test
 
-{ "(xz)y" } [ "C" compute ] unit-test
-{ "xz((((KK)x)y)z)" } [ "(S(S(K(S(KS)K))S)(KK))" evaluate ] unit-test
-{ "xzy" } [ "(S(S(K(S(KS)K))S)(KK))" resolve ] unit-test
+{ "(zx)y" } [ "C" compute ] unit-test
+{ "zx((((KK)z)y)x)" } [ "(S(S(K(S(KS)K))S)(KK))" evaluate ] unit-test
+{ "zxy" } [ "(S(S(K(S(KS)K))S)(KK))" resolve ] unit-test
 { t } [ "J" "((S(K(S(K((S((S(K((S(KS))K)))S))(KK))))))((S((S(K((S((SK)K))((SK)K))))((S(K((S(KS))K)))((S(K(S((SK)K))))K))))(K((S(K((S((S(K((S(KS))K)))S))(KK))))(S(K((S(K((S(KS))K)))((S(KS))K))))))))" [ resolve ] bi@ = ] unit-test

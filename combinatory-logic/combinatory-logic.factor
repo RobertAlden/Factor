@@ -1,5 +1,7 @@
-USING: arrays assocs continuations eval kernel lexer math math.order quotations
-ranges sequences sets sequences.deep splitting sorting strings words unicode tools.test ;
+USING: arrays assocs combinators continuations effects eval
+kernel lexer math math.order quotations ranges sequences
+sequences.deep sets sorting splitting strings tools.test unicode
+words ;
 IN: combinatory-logic
 
 : vars ( -- vars ) "zyxwvutsrqponmlkjihgfedcba" ;
@@ -80,27 +82,29 @@ IN: combinatory-logic
     
 : evaluate ( C -- F ) [ compute? ] [ compute ] while ; 
 
-: resolve ( F -- Ff ) 
+: normalize ( F -- Ff ) 
     evaluate 
     [ dup lower? ] [ 
         tokenize 
-        [ paren? [ resolve dup length 1 > [ "(" prepend ")" append ] when ] when 
+        [ paren? [ normalize dup length 1 > [ "(" prepend ")" append ] when ] when 
         ] map 
         "" join 
     ] until ; inline recursive
 
-: compile ( str -- quot ) 
+: postfix ( str -- quot ) 
     paren? [ extract ] when tokenize reverse 
-    [ paren? [ compile ]  when ] map flatten { "call" } append ; inline recursive
+    [ paren? [ postfix ]  when ] map flatten { "call" } append ; inline recursive
 
-: execute ( str -- lex ) 
-    resolve compile { "|" } over 
-    [ length 1 = ] filter
+: assemble ( x x x -- x ) 
+    { "[|" } prepend prepend prepend { "]" } append 
+    " " join ;
+
+: build ( str --  quot sep vars ) 
+    normalize postfix { "|" } over 
+    [ length 1 = ] filter 
     "" join vars intersect 
-    tokenize sort
-    { "[|" } prepend prepend prepend { "]" } append
-    " " join parse-string ;
+    tokenize sort ;
 
-: run ( -- x ) get-datastack [ execute call call ] with-datastack first  ; 
+: run ( x -- x ) build [ assemble ] [ { "output" } <effect> ] bi eval ;
 
 : run-tests ( -- ) "combinatory-logic" test ;
