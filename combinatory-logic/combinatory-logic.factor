@@ -4,8 +4,11 @@ sequences.deep sets sorting splitting strings tools.test unicode
 words ;
 IN: combinatory-logic
 
-: vars ( -- vars ) "zyxwvutsrqponmlkjihgfedcba" ;
 
+SYNTAX: C[ "]" parse-tokens { } [ ] map-as { "run" } append suffix! ;
+
+: vars ( -- vars ) "zyxwvutsrqponmlkjihgfedcba" ;
+ 
 : lookup-table ( C -- def ) 
     H{ 
         { "I" "a"   } 
@@ -16,6 +19,7 @@ IN: combinatory-logic
         { "B" "abc" }
         { "M" "a" }
         { "J" "abcd" }
+        { "H" "abc" }
         { "P" "abcd" }
     } at ;
 
@@ -29,6 +33,7 @@ IN: combinatory-logic
         { "B" "a(bc)" }
         { "M" "aa" }
         { "J" "ab(adc)" }
+        { "H" "abcb" }
         { "P" "a(bd)(cd)" }
     } at ;
 
@@ -92,19 +97,20 @@ IN: combinatory-logic
     ] until ; inline recursive
 
 : postfix ( str -- quot ) 
-    paren? [ extract ] when tokenize reverse 
-    [ paren? [ postfix ]  when ] map flatten { "call" } append ; inline recursive
+    paren? [ extract ] when tokenize reverse { "call" } append
+    [ paren? [ postfix ]  when ] map flatten ; inline recursive
 
 : assemble ( x x x -- x ) 
     { "[|" } prepend prepend prepend { "]" } append 
-    " " join ;
+    " " join parse-string call( -- x ) ; inline 
 
 : build ( str --  quot sep vars ) 
-    normalize postfix { "|" } over 
+    normalize postfix dup
     [ length 1 = ] filter 
     "" join vars intersect 
     tokenize sort ;
 
-: run ( x -- x ) build [ assemble ] [ { "output" } <effect> ] bi eval ;
-
+MACRO: run ( x -- x ) 
+  ! build [ assemble ] [ { "output" } <effect> ] bi call-effect ; 
+    build assemble ; 
 : run-tests ( -- ) "combinatory-logic" test ;
