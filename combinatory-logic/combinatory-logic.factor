@@ -100,11 +100,11 @@ SYNTAX: C[ "]" parse-tokens { } [ ] map-as { "run" } append suffix! ;
     paren? [ extract ] when tokenize reverse { "call" } append
     [ paren? [ postfix ]  when ] map flatten ; inline recursive
 
-: assemble ( x x x -- x ) 
-    { "[|" } prepend prepend prepend { "]" } append 
+: assemble ( x x -- x ) 
+    { "[|" } prepend { "|" } append prepend { "]" } append 
     " " join parse-string call( -- x ) ; inline 
 
-: build ( str --  quot sep vars ) 
+: build ( str --  quot vars ) 
     normalize postfix dup
     [ length 1 = ] filter 
     "" join vars intersect 
