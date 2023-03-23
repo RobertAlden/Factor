@@ -1,6 +1,6 @@
 USING: arrays assocs combinators continuations effects eval
 kernel lexer math math.order quotations ranges sequences
-sequences.deep sets sorting splitting strings tools.test unicode
+sequences.deep sequences.extras sets sorting splitting strings tools.test unicode
 words ;
 IN: combinatory-logic
 
@@ -97,7 +97,7 @@ SYNTAX: C[ "]" parse-tokens { } [ ] map-as { "run" } append suffix! ;
     ] until ; inline recursive
 
 : postfix ( str -- quot ) 
-    paren? [ extract ] when tokenize reverse { "call" } append
+    paren? [ extract ] when tokenize reverse
     [ paren? [ postfix ]  when ] map flatten ; inline recursive
 
 : assemble ( x x -- x ) 
@@ -110,7 +110,25 @@ SYNTAX: C[ "]" parse-tokens { } [ ] map-as { "run" } append suffix! ;
     "" join vars intersect 
     tokenize sort ;
 
+: where ( ... seq quot: ( ... elt -- ... ? ) -- ... indices ) 
+    find-all [ first ] { } map-as ; inline
+
+: get-head-indices ( vars -- vars head-indices ) 
+    [ get-datastack ] call 2 head* over length tail* [ callable? ] where ;
+
+: get-body-indices ( body head head-indices -- body head body-indices ) 
+    over nths pick '[ _ indices ] { } map-concat-as sort ;
+
+: weave-call-sites ( body head body-indices -- body head ) 
+    rot swap 1 head* 
+    [ + 1 + cut { "call" } prepend append ] each-index 
+    { "call" } append swap ;
+
+: inject-call-sites ( seq vars -- seq vars ) 
+    get-head-indices 
+    get-body-indices 
+    weave-call-sites ;
+
 MACRO: run ( x -- x ) 
-  ! build [ assemble ] [ { "output" } <effect> ] bi call-effect ; 
-    build assemble ; 
+    build inject-call-sites assemble ; 
 : run-tests ( -- ) "combinatory-logic" test ;

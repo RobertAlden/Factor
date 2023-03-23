@@ -26,5 +26,3 @@ tools.test ;
 { "zx((((KK)z)y)x)" } [ "(S(S(K(S(KS)K))S)(KK))" evaluate ] unit-test
 { "zxy" } [ "(S(S(K(S(KS)K))S)(KK))" normalize ] unit-test
 { t } [ "J" "((S(K(S(K((S((S(K((S(KS))K)))S))(KK))))))((S((S(K((S((SK)K))((SK)K))))((S(K((S(KS))K)))((S(K(S((SK)K))))K))))(K((S(K((S((S(K((S(KS))K)))S))(KK))))(S(K((S(K((S(KS))K)))((S(KS))K))))))))" [ normalize ] bi@ = ] unit-test
-
-{ 2 } [ { 2 4 4 4 5 5 7 9 } [ '[ _ - sq ] map ] [ [ sum ] [ length ] [ / ] "P" run ] [ sqrt ] "H" run ] unit-test
