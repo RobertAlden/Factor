@@ -21,6 +21,11 @@ SYNTAX: C[ "]" parse-tokens { } [ ] map-as { "run" } append suffix! ;
         { "J" "abcd" }
         { "H" "abc" }
         { "P" "abcd" }
+        { "T" "ab" }
+        { "L" "ab" }
+        { "O" "ab" } 
+        { "U" "ab" }
+        { "R" "abc" }
     } at ;
 
 : transform-table ( C -- res ) 
@@ -35,6 +40,11 @@ SYNTAX: C[ "]" parse-tokens { } [ ] map-as { "run" } append suffix! ;
         { "J" "ab(adc)" }
         { "H" "abcb" }
         { "P" "a(bd)(cd)" }
+        { "T" "ba" }
+        { "L" "a(bb)" }
+        { "O" "b(ab)" }
+        { "U" "b(aab)" }
+        { "R" "bca" }
     } at ;
 
 : translate ( C -- def abc ) [ transform-table ] [ lookup-table ] bi ;
